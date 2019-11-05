@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var ans = require("../model/ans")
 const request = require('request')
-
 use = {}
 /* GET home page. */
 router.post('/input', function (req, res, next) {
@@ -12,17 +11,17 @@ router.post('/input', function (req, res, next) {
   console.log(input)
   ans.find({}, function (err, anss) {
     var userMap = {};
-    shuffle(anss)
+    // shuffle(anss)
     anss.forEach(function (user) {
         var acc = getSim(req.body.input, user.keyword)
-        if (max < acc) {
+        if (max < acc) {       
           max = acc
           use = {
             output: randomItem(user.output)
           }
         } else if (max == 0) {
           use = {
-            output: "음.. 그 질문에 대한 답은 잘 모르겠네요..ㅠ"
+            output: "음.. 그 질문에 대한 답은 잘 모르겠네요.."
           }
         }
         if (count == anss.length) {
@@ -130,10 +129,10 @@ router.post('/', function (req, res, next) {
   })
   ansModel.save(function (err, newAns) {
     if (err) {
-      res.status(500).json({
-        message: "Internal server error",
-        data: null,
-      })
+        res.status(500).json({
+            status: 500,
+            success: false,
+          })
     }
     newAns.save(function (err, saveAns) {
       res.json({
